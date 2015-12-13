@@ -10,12 +10,13 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::resource('vehiculos', 'VehiculoController', ['only' => ['index', 'show']]);
+Route::resource('fabricantes', 'FabricanteController', ['except' => ['edit','create']]);
+Route::resource('fabricantes.vehiculos', 'FabricanteVehiculoController', ['except' => ['show', 'edit', 'create']]);
 
-Route::get('/', 'MyController@index');
+Route::pattern('inexistentes', '.*');
 
-Route::get('home', 'HomeController@index');
-
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
+Route::any('{inexistentes}', function()
+	{
+		return response()->json(['msg' => 'Rutas o metodos incorrectos', 'codigo' => 400],400);
+	});
